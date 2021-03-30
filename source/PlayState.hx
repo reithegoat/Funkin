@@ -56,6 +56,7 @@ class PlayState extends MusicBeatState
 	var halloweenLevel:Bool = false;
 
 	private var vocals:FlxSound;
+	private var secondaryVocals:FlxSound;
 
 	private var dad:Character;
 	private var gf:Character;
@@ -1030,6 +1031,10 @@ class PlayState extends MusicBeatState
 		FlxG.sound.music.onComplete = endSong;
 		vocals.play();
 
+		if(curSong.toLowerCase() == "moon-high"){
+			secondaryVocals.play();
+		}
+
 		#if desktop
 		// Song duration in a float, useful for the time left feature
 		songLength = FlxG.sound.music.length;
@@ -1055,7 +1060,14 @@ class PlayState extends MusicBeatState
 		else
 			vocals = new FlxSound();
 
+		if(curSong.toLowerCase() == "moon-high"){
+			secondaryVocals = new FlxSound().loadEmbedded(Paths.secVoices(PlayState.SONG.song));
+		} else {
+			secondaryVocals = new FlxSound();
+		}
+
 		FlxG.sound.list.add(vocals);
+		FlxG.sound.list.add(secondaryVocals);
 
 		notes = new FlxTypedGroup<Note>();
 		add(notes);
@@ -1256,6 +1268,7 @@ class PlayState extends MusicBeatState
 			{
 				FlxG.sound.music.pause();
 				vocals.pause();
+				secondaryVocals.pause();
 			}
 
 			if (!startTimer.finished)
@@ -1327,11 +1340,17 @@ class PlayState extends MusicBeatState
 	function resyncVocals():Void
 	{
 		vocals.pause();
+		secondaryVocals.pause();
 
 		FlxG.sound.music.play();
 		Conductor.songPosition = FlxG.sound.music.time;
 		vocals.time = Conductor.songPosition;
+		secondaryVocals.time = Conductor.songPosition;
+
 		vocals.play();
+		secondaryVocals.play();
+
+
 	}
 
 	private var paused:Bool = false;
@@ -1589,6 +1608,7 @@ class PlayState extends MusicBeatState
 			paused = true;
 
 			vocals.stop();
+			secondaryVocals.stop();
 			FlxG.sound.music.stop();
 
 			openSubState(new GameOverSubstate(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
@@ -1669,8 +1689,10 @@ class PlayState extends MusicBeatState
 
 					dad.holdTimer = 0;
 
-					if (SONG.needsVoices)
+					if (SONG.needsVoices){
 						vocals.volume = 1;
+						secondaryVocals.volume = 1;
+					}
 
 					daNote.kill();
 					notes.remove(daNote, true);
@@ -1712,6 +1734,7 @@ class PlayState extends MusicBeatState
 		canPause = false;
 		FlxG.sound.music.volume = 0;
 		vocals.volume = 0;
+		secondaryVocals.volume = 0;
 		if (SONG.validScore)
 		{
 			#if !switch
