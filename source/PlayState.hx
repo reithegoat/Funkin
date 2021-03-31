@@ -1620,8 +1620,11 @@ class PlayState extends MusicBeatState
 		// RESET = Quick Game Over Screen
 		if (controls.RESET)
 		{
-			health = 0;
-			trace("RESET = True");
+			if(!inCutscene){
+				trace("RESET = True");3
+				health = 0;
+			}
+			
 		}
 
 		// CHEAT = brandon's a pussy
