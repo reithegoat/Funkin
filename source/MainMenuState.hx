@@ -1,12 +1,9 @@
 package;
 
-#if desktop
-import Discord.DiscordClient;
-#end
+import Controls.KeyboardScheme;
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
-import flixel.addons.transition.FlxTransitionableState;
 import flixel.effects.FlxFlicker;
 import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.group.FlxGroup.FlxTypedGroup;
@@ -16,6 +13,10 @@ import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import io.newgrounds.NG;
 import lime.app.Application;
+
+#if desktop
+import Discord.DiscordClient;
+#end
 
 using StringTools;
 
@@ -31,6 +32,15 @@ class MainMenuState extends MusicBeatState
 	var optionShit:Array<String> = ['story mode', 'freeplay'];
 	#end
 
+	var newGaming:FlxText;
+	var newGaming2:FlxText;
+	var newInput:Bool = true;
+
+	public static var nightly:String = "-Nightly.1";
+
+	public static var kadeEngineVer:String = "1.3.1" + nightly;
+	public static var gameVer:String = "0.2.7.1";
+
 	var magenta:FlxSprite;
 	var camFollow:FlxObject;
 
@@ -40,9 +50,6 @@ class MainMenuState extends MusicBeatState
 		// Updating Discord Rich Presence
 		DiscordClient.changePresence("In the Menus", null);
 		#end
-
-		transIn = FlxTransitionableState.defaultTransIn;
-		transOut = FlxTransitionableState.defaultTransOut;
 
 		if (!FlxG.sound.music.playing)
 		{
@@ -96,12 +103,18 @@ class MainMenuState extends MusicBeatState
 
 		FlxG.camera.follow(camFollow, null, 0.06);
 
-		var versionShit:FlxText = new FlxText(5, FlxG.height - 18, 0, "v" + Application.current.meta.get('version'), 12);
+		var versionShit:FlxText = new FlxText(5, FlxG.height - 18, 0, gameVer + " FNF - " + kadeEngineVer + " Kade Engine", 12);
 		versionShit.scrollFactor.set();
 		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(versionShit);
 
 		// NG.core.calls.event.logEvent('swag').send();
+
+
+		if (FlxG.save.data.dfjk)
+			controls.setKeyboardScheme(KeyboardScheme.Solo, true);
+		else
+			controls.setKeyboardScheme(KeyboardScheme.Duo(true), true);
 
 		changeItem();
 
@@ -157,7 +170,7 @@ class MainMenuState extends MusicBeatState
 					{
 						if (curSelected != spr.ID)
 						{
-							FlxTween.tween(spr, {alpha: 0}, 0.4, {
+							FlxTween.tween(spr, {alpha: 0}, 1.3, {
 								ease: FlxEase.quadOut,
 								onComplete: function(twn:FlxTween)
 								{
@@ -182,8 +195,6 @@ class MainMenuState extends MusicBeatState
 										trace("Freeplay Menu Selected");
 
 									case 'options':
-										FlxTransitionableState.skipNextTransIn = true;
-										FlxTransitionableState.skipNextTransOut = true;
 										FlxG.switchState(new OptionsMenu());
 								}
 							});

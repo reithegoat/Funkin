@@ -124,7 +124,7 @@ class Character extends FlxSprite
 
 			case 'dad':
 				// DAD ANIMATION LOADING CODE
-				tex = Paths.getSparrowAtlas('DADDY_DEAREST');
+				tex = Paths.getSparrowAtlas('DADDY_DEAREST','shared');
 				frames = tex;
 				animation.addByPrefix('idle', 'Dad idle dance', 24);
 				animation.addByPrefix('singUP', 'Dad Sing Note UP', 24);
@@ -227,19 +227,6 @@ class Character extends FlxSprite
 				addOffset("singLEFT", -30);
 				addOffset("singDOWN", -40, -94);
 				playAnim('idle');
-			case 'cye':
-				trace('We are loading cye.');
-				tex = Paths.getSparrowAtlas('cye');
-				trace('We are loading cye sprites.');
-				frames = tex;
-				trace('We are loading cye frames.');
-				animation.addByPrefix('idle','Cye Idle',24, false);
-				trace('We are loading cye idle animation.');
-
-				addOffset('idle');
-				trace('We are loading cye idle offset.');
-				playAnim('idle');
-				trace('We are playing cye idle animation.');
 			case 'pico':
 				tex = Paths.getSparrowAtlas('Pico_FNF_assetss');
 				frames = tex;
@@ -280,7 +267,7 @@ class Character extends FlxSprite
 				flipX = true;
 
 			case 'bf':
-				var tex = Paths.getSparrowAtlas('BOYFRIEND');
+				var tex = Paths.getSparrowAtlas('BOYFRIEND','shared');
 				frames = tex;
 				animation.addByPrefix('idle', 'BF idle dance', 24, false);
 				animation.addByPrefix('singUP', 'BF NOTE UP0', 24, false);
@@ -482,8 +469,6 @@ class Character extends FlxSprite
 				playAnim('idle');
 
 				antialiasing = false;
-
-			
 
 			case 'parents-christmas':
 				frames = Paths.getSparrowAtlas('christmas/mom_dad_christmas_assets');

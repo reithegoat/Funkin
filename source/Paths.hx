@@ -23,7 +23,6 @@ class Paths
 
 		if (currentLevel != null)
 		{
-
 			var levelPath = getLibraryPathForce(file, currentLevel);
 			if (OpenFlAssets.exists(levelPath, type))
 				return levelPath;
@@ -91,7 +90,6 @@ class Paths
 		return 'songs:assets/songs/${song.toLowerCase()}/Voices.$SOUND_EXT';
 	}
 
-	
 	inline static public function secVoices(song:String)
 	{
 		return 'songs:assets/songs/${song.toLowerCase()}/SecVoices.$SOUND_EXT';

@@ -1,9 +1,5 @@
 package;
 
-#if desktop
-import Discord.DiscordClient;
-import sys.thread.Thread;
-#end
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
@@ -28,6 +24,11 @@ import io.newgrounds.NG;
 import lime.app.Application;
 import openfl.Assets;
 
+#if desktop
+import Discord.DiscordClient;
+import sys.thread.Thread;
+#end
+
 using StringTools;
 
 class TitleState extends MusicBeatState
@@ -47,7 +48,17 @@ class TitleState extends MusicBeatState
 	override public function create():Void
 	{
 		
+		#if sys
+		if (!sys.FileSystem.exists(Sys.getCwd() + "\\assets\\replays"))
+			sys.FileSystem.createDirectory(Sys.getCwd() + "\\assets\\replays");
+		#end
+
+		
 		PlayerSettings.init();
+
+		#if desktop
+		DiscordClient.initialize();
+		#end
 
 		curWacky = FlxG.random.getObject(getIntroTextShit());
 
@@ -55,14 +66,16 @@ class TitleState extends MusicBeatState
 
 		super.create();
 
-		//NGio.noLogin(APIStuff.API);
+		// NGio.noLogin(APIStuff.API);
 
 		#if ng
-		//var ng:NGio = new NGio(APIStuff.API, APIStuff.EncKey);
-		//trace('NEWGROUNDS LOL');
+		var ng:NGio = new NGio(APIStuff.API, APIStuff.EncKey);
+		trace('NEWGROUNDS LOL');
 		#end
 
-		FlxG.save.bind('cye', 'rei');
+		FlxG.save.bind('funkin', 'ninjamuffin99');
+
+		KadeEngineData.initSave();
 
 		Highscore.load();
 
@@ -89,10 +102,6 @@ class TitleState extends MusicBeatState
 		{
 			startIntro();
 		});
-		#end
-
-		#if desktop
-		DiscordClient.initialize();
 		#end
 	}
 
@@ -147,6 +156,7 @@ class TitleState extends MusicBeatState
 		logoBl.updateHitbox();
 		// logoBl.screenCenter();
 		// logoBl.color = FlxColor.BLACK;
+
 		add(logoBl);
 
 		titleText = new FlxSprite(100, FlxG.height * 0.8);
@@ -257,11 +267,11 @@ class TitleState extends MusicBeatState
 		if (pressedEnter && !transitioning && skippedIntro)
 		{
 			#if !switch
-			//NGio.unlockMedal(60960);
+			NGio.unlockMedal(60960);
 
 			// If it's Friday according to da clock
 			if (Date.now().getDay() == 5)
-				//NGio.unlockMedal(61034);
+				NGio.unlockMedal(61034);
 			#end
 
 			titleText.animation.play('press');
@@ -318,8 +328,6 @@ class TitleState extends MusicBeatState
 		super.beatHit();
 
 		logoBl.animation.play('bump');
-		danceLeft = !danceLeft;
-
 		FlxG.log.add(curBeat);
 
 		switch (curBeat)
