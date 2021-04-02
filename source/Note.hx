@@ -48,7 +48,7 @@ class Note extends FlxSprite
 		x += 50;
 		// MAKE SURE ITS DEFINITELY OFF SCREEN?
 		y -= 2000;
-		this.strumTime = strumTime + FlxG.save.data.offset;
+		this.strumTime = strumTime;
 
 		this.noteData = noteData;
 
@@ -127,13 +127,12 @@ class Note extends FlxSprite
 		if (FlxG.save.data.downscroll && sustainNote) 
 			flipY = true;
 
+
 		if (isSustainNote && prevNote != null)
 		{
 			noteScore * 0.2;
 			alpha = 0.6;
-
 			x += width / 2;
-
 			switch (noteData)
 			{
 				case 2:
@@ -145,14 +144,13 @@ class Note extends FlxSprite
 				case 0:
 					animation.play('purpleholdend');
 			}
-
 			updateHitbox();
-
+	
 			x -= width / 2;
-
+	
 			if (PlayState.curStage.startsWith('school'))
 				x += 30;
-
+	
 			if (prevNote.isSustainNote)
 			{
 				switch (prevNote.noteData)
@@ -166,13 +164,14 @@ class Note extends FlxSprite
 					case 3:
 						prevNote.animation.play('redhold');
 				}
-
+	
 				prevNote.scale.y *= Conductor.stepCrochet / 100 * 1.5 * PlayState.SONG.speed;
 				prevNote.updateHitbox();
 				// prevNote.setGraphicSize();
 			}
 		}
 	}
+	
 
 	override function update(elapsed:Float)
 	{
@@ -181,7 +180,7 @@ class Note extends FlxSprite
 		if (mustPress)
 		{
 			if (strumTime > Conductor.songPosition - Conductor.safeZoneOffset
-				&& strumTime < Conductor.songPosition + Conductor.safeZoneOffset)
+				&& strumTime < Conductor.songPosition + (Conductor.safeZoneOffset * 0.5))
 				canBeHit = true;
 			else
 				canBeHit = false;
