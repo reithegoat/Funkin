@@ -41,14 +41,14 @@ class Note extends FlxSprite
 
 		if (prevNote == null)
 			prevNote = this;
-		
+
 		this.prevNote = prevNote;
 		isSustainNote = sustainNote;
 
 		x += 50;
 		// MAKE SURE ITS DEFINITELY OFF SCREEN?
 		y -= 2000;
-		this.strumTime = strumTime + FlxG.save.data.offset;
+		this.strumTime = strumTime;
 
 		this.noteData = noteData;
 
@@ -63,20 +63,20 @@ class Note extends FlxSprite
 				animation.add('redScroll', [7]);
 				animation.add('blueScroll', [5]);
 				animation.add('purpleScroll', [4]);
-				
-				animation.add('purplehold', [0]);
-				animation.add('greenhold', [2]);
-				animation.add('redhold', [3]);
-				animation.add('bluehold', [1]);
-				
+
 				if (isSustainNote)
 				{
 					loadGraphic(Paths.image('weeb/pixelUI/arrowEnds'), true, 7, 6);
 
-						animation.add('purpleholdend', [4]);
-						animation.add('greenholdend', [6]);
-						animation.add('redholdend', [7]);
-						animation.add('blueholdend', [5]);
+					animation.add('purpleholdend', [4]);
+					animation.add('greenholdend', [6]);
+					animation.add('redholdend', [7]);
+					animation.add('blueholdend', [5]);
+
+					animation.add('purplehold', [0]);
+					animation.add('greenhold', [2]);
+					animation.add('redhold', [3]);
+					animation.add('bluehold', [1]);
 				}
 
 				setGraphicSize(Std.int(width * PlayState.daPixelZoom));
@@ -89,16 +89,16 @@ class Note extends FlxSprite
 				animation.addByPrefix('redScroll', 'red0');
 				animation.addByPrefix('blueScroll', 'blue0');
 				animation.addByPrefix('purpleScroll', 'purple0');
-				
+
+				animation.addByPrefix('purpleholdend', 'pruple end hold');
+				animation.addByPrefix('greenholdend', 'green hold end');
+				animation.addByPrefix('redholdend', 'red hold end');
+				animation.addByPrefix('blueholdend', 'blue hold end');
+
 				animation.addByPrefix('purplehold', 'purple hold piece');
 				animation.addByPrefix('greenhold', 'green hold piece');
 				animation.addByPrefix('redhold', 'red hold piece');
 				animation.addByPrefix('bluehold', 'blue hold piece');
-
-					animation.addByPrefix('purpleholdend', 'pruple end hold');
-					animation.addByPrefix('greenholdend', 'green hold end');
-					animation.addByPrefix('redholdend', 'red hold end');
-					animation.addByPrefix('blueholdend', 'blue hold end');
 
 				setGraphicSize(Std.int(width * 0.7));
 				updateHitbox();
@@ -120,6 +120,8 @@ class Note extends FlxSprite
 				x += swagWidth * 3;
 				animation.play('redScroll');
 		}
+
+		// trace(prevNote);
 
 		// we make sure its downscroll and its a SUSTAIN NOTE (aka a trail, not a note)
 		// and flip it so it doesn't look weird.
@@ -167,7 +169,7 @@ class Note extends FlxSprite
 						prevNote.animation.play('redhold');
 				}
 
-				prevNote.scale.y *= Conductor.stepCrochet / 100 * 1.5 * PlayState.SONG.speed;
+				prevNote.scale.y *= Conductor.stepCrochet / 100 * 1.8 * PlayState.SONG.speed;
 				prevNote.updateHitbox();
 				// prevNote.setGraphicSize();
 			}
@@ -180,38 +182,15 @@ class Note extends FlxSprite
 
 		if (mustPress)
 		{
+			// The * 0.5 is so that it's easier to hit them too late, instead of too early
 			if (strumTime > Conductor.songPosition - Conductor.safeZoneOffset
-				&& strumTime < Conductor.songPosition + Conductor.safeZoneOffset)
+				&& strumTime < Conductor.songPosition + (Conductor.safeZoneOffset * 0.5))
 				canBeHit = true;
 			else
 				canBeHit = false;
 
-			var noteDiff:Float = Math.abs(strumTime - Conductor.songPosition);
-
-			if (canBeHit)
-			{
-				if (noteDiff > Conductor.safeZoneOffset * 0.95)
-					rating = "shit";
-				else if (noteDiff < Conductor.safeZoneOffset * -0.95)
-					rating = "shit";
-				else if (noteDiff > Conductor.safeZoneOffset * 0.70)
-					rating = "bad";
-				else if (noteDiff < Conductor.safeZoneOffset * -0.75)
-					rating = "bad";
-				else if (noteDiff > Conductor.safeZoneOffset * 0.45)
-					rating = "good";
-				else if (noteDiff < Conductor.safeZoneOffset * -0.45)
-					rating = "good";
-				else
-					rating = "sick";
-				FlxG.watch.addQuick("Note " + this.ID,rating);
-			}
-
-			if (strumTime < Conductor.songPosition - (Conductor.safeZoneOffset * 0.80) && !wasGoodHit)
-			{
+			if (strumTime < Conductor.songPosition - Conductor.safeZoneOffset && !wasGoodHit)
 				tooLate = true;
-				rating = "shit";
-			}
 		}
 		else
 		{

@@ -28,13 +28,18 @@ class DiscordClient
 		DiscordRpc.shutdown();
 	}
 
+	public static function shutdown()
+	{
+		DiscordRpc.shutdown();
+	}
+
 	static function onReady()
 	{
 		DiscordRpc.presence({
 			details: "In the Menus",
 			state: null,
 			largeImageKey: 'icon',
-			largeImageText: "fridaynightfunkin"
+			largeImageText: "FNF' - Cye Week"
 		});
 	}
 
@@ -70,7 +75,7 @@ class DiscordClient
 			details: details,
 			state: state,
 			largeImageKey: 'icon',
-			largeImageText: "FNF' - Cye Week Mod",
+			largeImageText: "FNF' - Cye Week",
 			smallImageKey : smallImageKey,
 			// Obtained times are in milliseconds so they are divided so Discord can use it
 			startTimestamp : Std.int(startTimestamp / 1000),

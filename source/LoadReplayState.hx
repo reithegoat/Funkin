@@ -48,9 +48,7 @@ class LoadReplayState extends MusicBeatState
         
         addWeek(['Senpai', 'Roses', 'Thorns'], 6, ['senpai', 'senpai', 'spirit']);
 
-		addWeek(['SongOne','Moon-High'],7,['pico']);
-
-
+		addWeek(['SongOne','Moon-High'],7,['gf','cye']);
         for(i in 0...controlsStrings.length)
         {
             var string:String = controlsStrings[i];
