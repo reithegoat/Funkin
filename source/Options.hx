@@ -107,6 +107,24 @@ class InstantDeathMode extends Option {
 	}
 }
 
+class GhostNotesMode extends Option {
+	public function new (desc:String){
+		super();
+		description = desc;
+	}
+
+	public override function press():Bool{
+		trace("switch");
+		FlxG.save.data.ghostmode = !FlxG.save.data.ghostmode;
+		display = updateDisplay();
+		return true;
+	}
+
+	public override function updateDisplay():String {
+		return "Ghost Notes " + (!FlxG.save.data.ghostmode ? "off" : "on");
+	}
+}
+
 class DownscrollOption extends Option
 {
 	public function new(desc:String)

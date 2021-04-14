@@ -81,6 +81,7 @@ class PlayState extends MusicBeatState
 	#end
 
 	private var vocals:FlxSound;
+	private var secondaryVocals:FlxSound;
 
 	private var dad:Character;
 	private var gf:Character;
@@ -123,6 +124,7 @@ class PlayState extends MusicBeatState
 	private var iconP2:HealthIcon;
 	private var camHUD:FlxCamera;
 	private var camGame:FlxCamera;
+
 
 	public static var offsetTesting:Bool = false;
 
@@ -591,20 +593,20 @@ class PlayState extends MusicBeatState
 								add(waveSpriteFG);
 						*/
 			}
-			case 'songone' | 'moon-high':
+			case 'songone' | 'moon-high' | 'moon-high-remixed' | 'space-duel':
 			{
 				defaultCamZoom = 0.7;
 				curStage = 'forest';
 
 
 
-				var sky:FlxSprite = new FlxSprite(-800, -700).loadGraphic(Paths.image('forest/chill_vibes_sky'));
+				var sky:FlxSprite = new FlxSprite(-900, -600).loadGraphic(Paths.image('forest/chill_vibes_sky'));
 				sky.antialiasing = true;
 				sky.scrollFactor.set(0.9, 0.9);
 				sky.active = false;
 				add(sky);
 
-				var moon:FlxSprite = new FlxSprite(-500, -300).loadGraphic(Paths.image('forest/chill_vibes_moon'));
+				var moon:FlxSprite = new FlxSprite(-400, -300).loadGraphic(Paths.image('forest/chill_vibes_moon'));
 				moon.setGraphicSize(Std.int(moon.width * 0.7));
 				moon.updateHitbox();
 				moon.antialiasing = true;
@@ -613,14 +615,16 @@ class PlayState extends MusicBeatState
 
 				add(moon);
 
-				var grassbg:FlxSprite = new FlxSprite(-800, -700).loadGraphic(Paths.image('forest/chill_vibes_BG_grass'));
+				var grassbg:FlxSprite = new FlxSprite(-900, -600).loadGraphic(Paths.image('forest/chill_vibes_BG_grass'));
 				grassbg.antialiasing = true;
+				grassbg.setGraphicSize(Std.int(grassbg.width * 0.8));
 				grassbg.scrollFactor.set(0.9, 0.9);
 				grassbg.active = false;
 				add(grassbg);
 
-				var grass:FlxSprite = new FlxSprite(-800, -700).loadGraphic(Paths.image('forest/chill_vibes_grass_and_trees'));
+				var grass:FlxSprite = new FlxSprite(-900, -600).loadGraphic(Paths.image('forest/chill_vibes_grass_and_trees'));
 				grass.antialiasing = true;
+				grass.setGraphicSize(Std.int(grass.width * 0.8));
 				grass.scrollFactor.set(0.9, 0.9);
 				grass.active = false;
 				add(grass);
@@ -681,6 +685,7 @@ class PlayState extends MusicBeatState
 
 		var camPos:FlxPoint = new FlxPoint(dad.getGraphicMidpoint().x, dad.getGraphicMidpoint().y);
 
+
 		switch (SONG.player2)
 		{
 			case 'gf':
@@ -705,7 +710,8 @@ class PlayState extends MusicBeatState
 				dad.y += 300;
 			case 'cye':
 				camPos.x += 600;
-				dad.y += 300;
+				dad.y += 250;
+				FlxTween.tween(dad,{y: dad.y - 200},4,{type: FlxTweenType.PINGPONG, ease: FlxEase.quadInOut});
 			case 'parents-christmas':
 				dad.x -= 500;
 			case 'senpai':
@@ -722,6 +728,7 @@ class PlayState extends MusicBeatState
 				camPos.set(dad.getGraphicMidpoint().x + 300, dad.getGraphicMidpoint().y);
 		}
 
+		
 
 		
 		boyfriend = new Boyfriend(770, 450, SONG.player1);
@@ -746,7 +753,7 @@ class PlayState extends MusicBeatState
 				boyfriend.x += 200;
 				boyfriend.y += 220;
 				gf.x += 180;
-				gf.y += 300;
+				gf.y += 300;	
 			case 'schoolEvil':
 				// trailArea.scrollFactor.set();
 
@@ -760,6 +767,11 @@ class PlayState extends MusicBeatState
 				boyfriend.y += 220;
 				gf.x += 180;
 				gf.y += 300;
+		}
+
+
+		if(SONG.song.toLowerCase() == "dimentia"){
+			boyfriend.x -= 770;	
 		}
 
 		add(gf);
@@ -1187,6 +1199,11 @@ class PlayState extends MusicBeatState
 		FlxG.sound.music.onComplete = endSong;
 		vocals.play();
 
+		switch(curSong.toLowerCase()){
+			case 'moon-high' | 'moon-high-remixed':
+				secondaryVocals.play();
+		}
+
 		// Song duration in a float, useful for the time left feature
 		songLength = FlxG.sound.music.length;
 
@@ -1247,7 +1264,15 @@ class PlayState extends MusicBeatState
 		else
 			vocals = new FlxSound();
 
+		switch(curSong.toLowerCase()){
+			case 'moon-high' | 'moon-high-remixed':
+				secondaryVocals = new FlxSound().loadEmbedded(Paths.secVoices(PlayState.SONG.song));
+			default:
+				secondaryVocals = new FlxSound();
+		}
+
 		FlxG.sound.list.add(vocals);
+		FlxG.sound.list.add(secondaryVocals);
 
 		notes = new FlxTypedGroup<Note>();
 		add(notes);
@@ -1450,7 +1475,9 @@ class PlayState extends MusicBeatState
 			{
 				FlxG.sound.music.pause();
 				vocals.pause();
+				secondaryVocals.pause();
 			}
+
 
 			#if desktop
 			DiscordClient.changePresence("PAUSED on " + SONG.song + " (" + storyDifficultyText + ") " + generateRanking(), "Acc: " + truncateFloat(accuracy, 2) + "% | Score: " + songScore + " | Misses: " + misses  , iconRPC);
@@ -1475,6 +1502,7 @@ class PlayState extends MusicBeatState
 				startTimer.active = true;
 			paused = false;
 
+
 			#if desktop
 			if (startTimer.finished)
 			{
@@ -1494,11 +1522,15 @@ class PlayState extends MusicBeatState
 	function resyncVocals():Void
 	{
 		vocals.pause();
+		secondaryVocals.pause();
 
 		FlxG.sound.music.play();
 		Conductor.songPosition = FlxG.sound.music.time;
 		vocals.time = Conductor.songPosition;
+		secondaryVocals.time = Conductor.songPosition;
+
 		vocals.play();
+		secondaryVocals.play();
 
 		#if desktop
 		DiscordClient.changePresence(detailsText + " " + SONG.song + " (" + storyDifficultyText + ") " + generateRanking(), "\nAcc: " + truncateFloat(accuracy, 2) + "% | Score: " + songScore + " | Misses: " + misses  , iconRPC);
@@ -1786,6 +1818,8 @@ class PlayState extends MusicBeatState
 					case 'senpai-angry':
 						camFollow.y = dad.getMidpoint().y - 430;
 						camFollow.x = dad.getMidpoint().x - 100;
+					case 'cye':
+						camFollow.y = 500;
 				}
 
 				if (dad.curCharacter == 'mom')
@@ -1877,6 +1911,7 @@ class PlayState extends MusicBeatState
 
 			vocals.stop();
 			FlxG.sound.music.stop();
+			secondaryVocals.stop();
 
 			openSubState(new GameOverSubstate(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
 
@@ -1904,15 +1939,33 @@ class PlayState extends MusicBeatState
 			{
 				notes.forEachAlive(function(daNote:Note)
 				{	
-					if (daNote.y > FlxG.height)
-					{
-						daNote.active = false;
-						daNote.visible = false;
-					}
-					else
-					{
-						daNote.visible = true;
-						daNote.active = true;
+					
+
+					if(FlxG.save.data.ghostmode){
+						if(FlxG.save.data.downscroll){
+							if(daNote.y > (FlxG.height / 1.75)){
+								FlxTween.tween(daNote,{alpha: 0},0.1);
+							} else {
+								daNote.alpha = 1;
+							}
+						} else {
+							if(daNote.y < (FlxG.height / 1.75)){
+								FlxTween.tween(daNote,{alpha: 0},0.1);
+							} else {
+								daNote.alpha = 1;
+							}
+						}
+					} else {
+						if (daNote.y > FlxG.height)
+							{
+								daNote.active = false;
+								daNote.visible = false;
+							}
+						else
+							{
+								daNote.visible = true;
+								daNote.active = true;
+							}
 					}
 	
 					if (!daNote.mustPress && daNote.wasGoodHit)
@@ -1942,8 +1995,10 @@ class PlayState extends MusicBeatState
 	
 						dad.holdTimer = 0;
 	
-						if (SONG.needsVoices)
+						if (SONG.needsVoices){
 							vocals.volume = 1;
+							secondaryVocals.volume = 1;
+						}
 	
 						daNote.kill();
 						notes.remove(daNote, true);
@@ -1958,6 +2013,8 @@ class PlayState extends MusicBeatState
 					// WIP interpolation shit? Need to fix the pause issue
 					// daNote.y = (strumLine.y - (songTime - daNote.strumTime) * (0.45 * PlayState.SONG.speed));
 	
+					
+
 					if ((daNote.y < -daNote.height && !FlxG.save.data.downscroll || daNote.y >= strumLine.y + 106 && FlxG.save.data.downscroll) && daNote.mustPress)
 					{
 						if (daNote.isSustainNote && daNote.wasGoodHit)
@@ -2003,6 +2060,7 @@ class PlayState extends MusicBeatState
 		canPause = false;
 		FlxG.sound.music.volume = 0;
 		vocals.volume = 0;
+		secondaryVocals.volume = 0;
 		if (SONG.validScore)
 		{
 			#if !switch

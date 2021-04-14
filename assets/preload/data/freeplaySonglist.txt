@@ -19,3 +19,5 @@ Roses:senpai:6
 Thorns:spirit:6
 SongOne:gf:7
 Moon-High:cye:7
+Space-Duel:cye:7
+Moon-High-Remixed:cye:8

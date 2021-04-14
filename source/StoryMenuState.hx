@@ -31,11 +31,12 @@ class StoryMenuState extends MusicBeatState
 		['Satin-Panties', "High", "Milf"],
 		['Cocoa', 'Eggnog', 'Winter-Horrorland'],
 		['Senpai', 'Roses', 'Thorns'],
-		['SongOne','Moon-High']
+		['SongOne','Moon-High','Space-Duel'],
+		['Moon-High-Remixed']
 	];
 	var curDifficulty:Int = 1;
 
-	public static var weekUnlocked:Array<Bool> = [true, true, true, true, true, true, true,true];
+	public static var weekUnlocked:Array<Bool> = [true, true, true, true, true, true, true,true,true];
 
 	var weekCharacters:Array<Dynamic> = [
 		['gf', 'bf', ''],
@@ -45,6 +46,7 @@ class StoryMenuState extends MusicBeatState
 		['mom', 'bf', 'gf'],
 		['parents-christmas', 'bf', 'gf'],
 		['senpai', 'bf', 'gf'],
+		['cye','bf','gf'],
 		['cye','bf','gf']
 	];
 
@@ -56,7 +58,8 @@ class StoryMenuState extends MusicBeatState
 		"MOMMY MUST MURDER",
 		"RED SNOW",
 		"hating simulator ft. moawling",
-		"Cye"
+		"Cye",
+		"Cye but Remixed"
 	];
 
 	var txtWeekTitle:FlxText;
