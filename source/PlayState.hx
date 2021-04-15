@@ -1200,7 +1200,7 @@ class PlayState extends MusicBeatState
 		vocals.play();
 
 		switch(curSong.toLowerCase()){
-			case 'moon-high' | 'moon-high-remixed':
+			case 'moon-high' | 'moon-high-remixed' | 'space-duel':
 				secondaryVocals.play();
 		}
 
@@ -1265,7 +1265,7 @@ class PlayState extends MusicBeatState
 			vocals = new FlxSound();
 
 		switch(curSong.toLowerCase()){
-			case 'moon-high' | 'moon-high-remixed':
+			case 'moon-high' | 'moon-high-remixed' | 'space-duel':
 				secondaryVocals = new FlxSound().loadEmbedded(Paths.secVoices(PlayState.SONG.song));
 			default:
 				secondaryVocals = new FlxSound();
