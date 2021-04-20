@@ -102,6 +102,7 @@ class Paths
 
 	inline static public function image(key:String, ?library:String)
 	{
+		trace ('Loading ' + key + ' from ' + library);
 		return getPath('images/$key.png', IMAGE, library);
 	}
 

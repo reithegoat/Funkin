@@ -24,40 +24,22 @@ class StoryMenuState extends MusicBeatState
 	var scoreText:FlxText;
 
 	var weekData:Array<Dynamic> = [
-		['Tutorial'],
-		['Bopeebo', 'Fresh', 'Dadbattle'],
-		['Spookeez', 'South', "Monster"],
-		['Pico', 'Philly', "Blammed"],
-		['Satin-Panties', "High", "Milf"],
-		['Cocoa', 'Eggnog', 'Winter-Horrorland'],
-		['Senpai', 'Roses', 'Thorns'],
-		['SongOne','Moon-High','Space-Duel'],
+		['SongOne'],
+		['Moon-High','Far-Heaven','Space-Duel'],
 		['Moon-High-Remixed']
 	];
 	var curDifficulty:Int = 1;
 
-	public static var weekUnlocked:Array<Bool> = [true, true, true, true, true, true, true,true,true];
+	public static var weekUnlocked:Array<Bool> = [true,true];
 
 	var weekCharacters:Array<Dynamic> = [
-		['gf', 'bf', ''],
-		['dad', 'bf', 'gf'],
-		['spooky', 'bf', 'gf'],
-		['pico', 'bf', 'gf'],
-		['mom', 'bf', 'gf'],
-		['parents-christmas', 'bf', 'gf'],
-		['senpai', 'bf', 'gf'],
+		['cye','bf','gf'],
 		['cye','bf','gf'],
 		['cye','bf','gf']
 	];
 
 	var weekNames:Array<String> = [
-		"",
-		"Daddy Dearest",
-		"Spooky Month",
-		"PICO",
-		"MOMMY MUST MURDER",
-		"RED SNOW",
-		"hating simulator ft. moawling",
+		"Girlfriend",
 		"Cye",
 		"Cye but Remixed"
 	];
@@ -355,6 +337,8 @@ class StoryMenuState extends MusicBeatState
 
 	function changeWeek(change:Int = 0):Void
 	{
+		trace('Current Week is ' + curWeek);
+
 		curWeek += change;
 
 		if (curWeek >= weekData.length)
