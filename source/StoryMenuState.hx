@@ -24,14 +24,14 @@ class StoryMenuState extends MusicBeatState
 	var scoreText:FlxText;
 
 	var weekData:Array<Dynamic> = [
-		['Tutorial'],
+		['SongOne'],
 		['Bopeebo', 'Fresh', 'Dadbattle'],
 		['Spookeez', 'South', "Monster"],
 		['Pico', 'Philly', "Blammed"],
 		['Satin-Panties', "High", "Milf"],
 		['Cocoa', 'Eggnog', 'Winter-Horrorland'],
 		['Senpai', 'Roses', 'Thorns'],
-		['SongOne','Moon-High','Space-Duel'],
+		['Moon-High','Far-Heaven','Space-Duel'],
 		['Moon-High-Remixed']
 	];
 	var curDifficulty:Int = 1;

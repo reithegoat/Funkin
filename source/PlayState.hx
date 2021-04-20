@@ -593,7 +593,7 @@ class PlayState extends MusicBeatState
 								add(waveSpriteFG);
 						*/
 			}
-			case 'songone' | 'moon-high' | 'moon-high-remixed' | 'space-duel':
+			case 'songone' | 'moon-high' | 'moon-high-remixed' | 'space-duel' | 'far-heaven':
 			{
 				defaultCamZoom = 0.7;
 				curStage = 'forest';
@@ -1200,7 +1200,7 @@ class PlayState extends MusicBeatState
 		vocals.play();
 
 		switch(curSong.toLowerCase()){
-			case 'moon-high' | 'moon-high-remixed' | 'space-duel':
+			case 'moon-high' | 'moon-high-remixed' | 'space-duel' | 'far-heaven':
 				secondaryVocals.play();
 		}
 
@@ -1265,7 +1265,7 @@ class PlayState extends MusicBeatState
 			vocals = new FlxSound();
 
 		switch(curSong.toLowerCase()){
-			case 'moon-high' | 'moon-high-remixed' | 'space-duel':
+			case 'moon-high' | 'moon-high-remixed' | 'space-duel' | 'far-heaven':
 				secondaryVocals = new FlxSound().loadEmbedded(Paths.secVoices(PlayState.SONG.song));
 			default:
 				secondaryVocals = new FlxSound();
