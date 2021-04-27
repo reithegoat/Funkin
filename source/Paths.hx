@@ -85,6 +85,11 @@ class Paths
 		return getPath('music/$key.$SOUND_EXT', MUSIC, library);
 	}
 
+	inline static public function video(key:String, ?library:String)
+	{
+		return getPath('videos/$key.webm', MOVIE_CLIP, library);
+	}
+
 	inline static public function voices(song:String)
 	{
 		return 'songs:assets/songs/${song.toLowerCase()}/Voices.$SOUND_EXT';
@@ -105,6 +110,8 @@ class Paths
 		trace ('Loading ' + key + ' from ' + library);
 		return getPath('images/$key.png', IMAGE, library);
 	}
+
+
 
 	inline static public function font(key:String)
 	{

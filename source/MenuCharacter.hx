@@ -44,16 +44,16 @@ class MenuCharacter extends FlxSprite
 
 		frames = Paths.getSparrowAtlas('campaign_menu_UI_characters');
 
-		animation.addByPrefix('bf', "BF Idle dance white", 24);
-		animation.addByPrefix('bfConfirm', 'BF HEY!!', 24, false);
-		animation.addByPrefix('gf', "GF Dancing Beat WHITE", 24);
-		animation.addByPrefix('dad', "Dad Idle dance BLACK LINE", 24);
-		animation.addByPrefix('spooky', "spooky dance Idle BLACK LINES", 24);
-		animation.addByPrefix('pico', "Pico Idle Dance", 24);
-		animation.addByPrefix('mom', "Mom Idle BLACK LINES", 24);
-		animation.addByPrefix('parents-christmas', "Parent-Christmas Idle", 24);
-		animation.addByPrefix('senpai', "SENPAI Idle BLACK", 24);
-		animation.addByPrefix('cye','Cye Idle');
+		animation.addByPrefix('bf', "BF-Idle-dance-white", 24);
+		animation.addByPrefix('bfConfirm', 'BF-HEY--', 24, false);
+		animation.addByPrefix('gf', "GF-Dancing-Beat-WHITE", 24);
+		//animation.addByPrefix('dad', "Dad-Idle-dance-BLACK-LINE", 24);
+		//animation.addByPrefix('spooky', "spooky-dance-Idle-BLACK-LINES", 24);
+		//animation.addByPrefix('pico', "Pico-Idle-Dance", 24);
+		//animation.addByPrefix('mom', "Mom-Idle-BLACK-LINES", 24);
+		//animation.addByPrefix('parents-christmas', "Parent-Christmas-Idle", 24);
+		//animation.addByPrefix('senpai', "SENPAI-Idle-BLACK", 24);
+		animation.addByPrefix('cye','Cye Idle_',12);
 
 		setGraphicSize(Std.int(width * scale));
 		updateHitbox();

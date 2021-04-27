@@ -330,6 +330,17 @@ class PlayState extends MusicBeatState
 
 				
 			}
+			case 'tutorial':
+			{
+				defaultCamZoom = 0.8;
+				curStage = "simulation";
+
+				var bg:FlxSprite = new FlxSprite(-1100, -750).loadGraphic(Paths.image('tutorialbg'));
+				bg.antialiasing = true;
+				bg.scrollFactor.set(1.0, 1.0);
+				bg.active = false;
+				add(bg); 
+			}
 			default:
 			{
 					defaultCamZoom = 0.9;
@@ -384,10 +395,15 @@ class PlayState extends MusicBeatState
 				camPos.x += 600;
 				dad.y += 250;
 				FlxTween.tween(dad,{y: dad.y - 200},4,{type: FlxTweenType.PINGPONG, ease: FlxEase.quadInOut});
-			
+			case 'bf-pixel':
+				camPos.x += 600;
+				dad.y = 600;
 		}
 
-		
+		switch(curStage){
+			case 'simulation':
+				gf.visible = false;
+		}
 
 		
 		boyfriend = new Boyfriend(770, 450, SONG.player1);
@@ -546,41 +562,6 @@ class PlayState extends MusicBeatState
 		{
 			switch (curSong.toLowerCase())
 			{
-				case "winter-horrorland":
-					var blackScreen:FlxSprite = new FlxSprite(0, 0).makeGraphic(Std.int(FlxG.width * 2), Std.int(FlxG.height * 2), FlxColor.BLACK);
-					add(blackScreen);
-					blackScreen.scrollFactor.set();
-					camHUD.visible = false;
-
-					new FlxTimer().start(0.1, function(tmr:FlxTimer)
-					{
-						remove(blackScreen);
-						FlxG.sound.play(Paths.sound('Lights_Turn_On'));
-						camFollow.y = -2050;
-						camFollow.x += 200;
-						FlxG.camera.focusOn(camFollow.getPosition());
-						FlxG.camera.zoom = 1.5;
-
-						new FlxTimer().start(0.8, function(tmr:FlxTimer)
-						{
-							camHUD.visible = true;
-							remove(blackScreen);
-							FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom}, 2.5, {
-								ease: FlxEase.quadInOut,
-								onComplete: function(twn:FlxTween)
-								{
-									startCountdown();
-								}
-							});
-						});
-					});
-				case 'senpai':
-					schoolIntro(doof);
-				case 'roses':
-					FlxG.sound.play(Paths.sound('ANGRY'));
-					schoolIntro(doof);
-				case 'thorns':
-					schoolIntro(doof);
 				default:
 					startCountdown();
 			}
@@ -600,89 +581,6 @@ class PlayState extends MusicBeatState
 		super.create();
 	}
 
-	function schoolIntro(?dialogueBox:DialogueBox):Void
-	{
-		var black:FlxSprite = new FlxSprite(-100, -100).makeGraphic(FlxG.width * 2, FlxG.height * 2, FlxColor.BLACK);
-		black.scrollFactor.set();
-		add(black);
-
-		var red:FlxSprite = new FlxSprite(-100, -100).makeGraphic(FlxG.width * 2, FlxG.height * 2, 0xFFff1b31);
-		red.scrollFactor.set();
-
-		var senpaiEvil:FlxSprite = new FlxSprite();
-		senpaiEvil.frames = Paths.getSparrowAtlas('weeb/senpaiCrazy');
-		senpaiEvil.animation.addByPrefix('idle', 'Senpai Pre Explosion', 24, false);
-		senpaiEvil.setGraphicSize(Std.int(senpaiEvil.width * 6));
-		senpaiEvil.scrollFactor.set();
-		senpaiEvil.updateHitbox();
-		senpaiEvil.screenCenter();
-
-		if (SONG.song.toLowerCase() == 'roses' || SONG.song.toLowerCase() == 'thorns')
-		{
-			remove(black);
-
-			if (SONG.song.toLowerCase() == 'thorns')
-			{
-				add(red);
-			}
-		}
-
-		new FlxTimer().start(0.3, function(tmr:FlxTimer)
-		{
-			black.alpha -= 0.15;
-
-			if (black.alpha > 0)
-			{
-				tmr.reset(0.3);
-			}
-			else
-			{
-				if (dialogueBox != null)
-				{
-					inCutscene = true;
-
-					if (SONG.song.toLowerCase() == 'thorns')
-					{
-						add(senpaiEvil);
-						senpaiEvil.alpha = 0;
-						new FlxTimer().start(0.3, function(swagTimer:FlxTimer)
-						{
-							senpaiEvil.alpha += 0.15;
-							if (senpaiEvil.alpha < 1)
-							{
-								swagTimer.reset();
-							}
-							else
-							{
-								senpaiEvil.animation.play('idle');
-								FlxG.sound.play(Paths.sound('Senpai_Dies'), 1, false, null, true, function()
-								{
-									remove(senpaiEvil);
-									remove(red);
-									FlxG.camera.fade(FlxColor.WHITE, 0.01, true, function()
-									{
-										add(dialogueBox);
-									}, true);
-								});
-								new FlxTimer().start(3.2, function(deadTime:FlxTimer)
-								{
-									FlxG.camera.fade(FlxColor.WHITE, 1.6, false);
-								});
-							}
-						});
-					}
-					else
-					{
-						add(dialogueBox);
-					}
-				}
-				else
-					startCountdown();
-
-				remove(black);
-			}
-		});
-	}
 
 	var startTimer:FlxTimer;
 	var perfectMode:Bool = false;
@@ -709,16 +607,6 @@ class PlayState extends MusicBeatState
 
 			var introAssets:Map<String, Array<String>> = new Map<String, Array<String>>();
 			introAssets.set('default', ['ready', "set", "go"]);
-			introAssets.set('school', [
-				'weeb/pixelUI/ready-pixel',
-				'weeb/pixelUI/set-pixel',
-				'weeb/pixelUI/date-pixel'
-			]);
-			introAssets.set('schoolEvil', [
-				'weeb/pixelUI/ready-pixel',
-				'weeb/pixelUI/set-pixel',
-				'weeb/pixelUI/date-pixel'
-			]);
 
 			var introAlts:Array<String> = introAssets.get('default');
 			var altSuffix:String = "";
@@ -817,7 +705,7 @@ class PlayState extends MusicBeatState
 		vocals.play();
 
 		switch(curSong.toLowerCase()){
-			case 'moon-high' | 'moon-high-remixed' | 'space-duel' | 'far-heaven':
+			case 'moon-high' | 'moon-high-remixed' | 'space-duel' | 'far-heaven' | 'tutorial':
 				secondaryVocals.play();
 		}
 
@@ -882,7 +770,7 @@ class PlayState extends MusicBeatState
 			vocals = new FlxSound();
 
 		switch(curSong.toLowerCase()){
-			case 'moon-high' | 'moon-high-remixed' | 'space-duel' | 'far-heaven':
+			case 'moon-high' | 'moon-high-remixed' | 'space-duel' | 'far-heaven' | 'tutorial':
 				secondaryVocals = new FlxSound().loadEmbedded(Paths.secVoices(PlayState.SONG.song));
 			default:
 				secondaryVocals = new FlxSound();
@@ -1379,6 +1267,8 @@ class PlayState extends MusicBeatState
 				{
 					case 'cye':
 						camFollow.y = 500;
+					case 'bf-pixel':
+						camFollow.y = boyfriend.getMidpoint().y - 100;
 				}
 			}
 

@@ -138,12 +138,11 @@ class TitleState extends MusicBeatState
 			// music.loadStream(Paths.music('freakyMenu'));
 			// FlxG.sound.list.add(music);
 			// music.play();
-			FlxG.sound.playMusic(Paths.music('freakyMenu'), 0);
+			FlxG.sound.playMusic(Paths.music('freakyMenu'), 1);
 
-			FlxG.sound.music.fadeIn(4, 0, 0.7);
 		}
 
-		Conductor.changeBPM(102);
+		Conductor.changeBPM(100);
 		persistentUpdate = true;
 
 		var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('title/bg'));
@@ -152,6 +151,15 @@ class TitleState extends MusicBeatState
 		bg.updateHitbox();
 		// bg.updateHitbox();
 		add(bg);
+		
+		var cye:FlxSprite = new FlxSprite().loadGraphic(Paths.image('title/cye'));
+		cye.antialiasing = true;
+		cye.setGraphicSize(1280,720);
+		cye.updateHitbox();
+		// bg.updateHitbox();
+		add(cye);
+
+		FlxTween.tween(cye, {y: -50},2.5,{type: FlxTweenType.PINGPONG, ease: FlxEase.quadInOut});
 
 		logoBl = new FlxSprite(-150, -100);
 		logoBl.frames = Paths.getSparrowAtlas('logoBumpin');
@@ -311,16 +319,31 @@ class TitleState extends MusicBeatState
 		coolText.y += (textGroup.length * 60) + 200;
 		credGroup.add(coolText);
 		textGroup.add(coolText);
+		coolText.alpha = 0;
+		FlxTween.tween(coolText,{alpha: 1},.15,{type: FlxTweenType.ONESHOT});
 	}
 
 	function deleteCoolText()
 	{
-		while (textGroup.members.length > 0)
+		/*
+ 		while (textGroup.members.length > 0)
 		{
 			credGroup.remove(textGroup.members[0], true);
 			textGroup.remove(textGroup.members[0], true);
 		}
-	}
+		*/
+
+		for(txt in textGroup.members){
+			FlxTween.tween(txt, {alpha: 0},.15,{type: FlxTweenType.ONESHOT});
+			
+			var txtTimer:FlxTimer = new FlxTimer().start(.15, function(tmr:FlxTimer){
+				textGroup.remove(txt,true);
+				credGroup.remove(txt,true);
+			});
+			
+		}
+ 	}
+
 
 	override function beatHit()
 	{
@@ -343,26 +366,26 @@ class TitleState extends MusicBeatState
 			// credTextShit.visible = false;
 			// credTextShit.text = 'In association \nwith';
 			// credTextShit.screenCenter();
-			case 9:
+			case 10:
 				createCoolText([curWacky[0]]);
-			case 11:
+			case 12:
 				addMoreText(curWacky[1]);
 			// credTextShit.text += '\nNewgrounds';
-			case 13:
+			case 14:
 				deleteCoolText();
 			// credTextShit.visible = false;
 			// credTextShit.text = "Friday";
 			// credTextShit.screenCenter();
-			case 14:
+			case 16:
 				addMoreText('Cye');
 			// credTextShit.visible = true;
-			case 15:
+			case 17:
 				addMoreText('Full');
 			// credTextShit.text += '\nNight';
-			case 16:
+			case 18:
 				addMoreText('Week'); // credTextShit.text += '\nFunkin';
 
-			case 18:
+			case 20:
 				skipIntro();
 		}
 	}

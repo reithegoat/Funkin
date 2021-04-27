@@ -12,6 +12,8 @@ import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import lime.net.curl.CURLCode;
+import flixel.tweens.FlxEase;
+import flixel.util.FlxGradient;
 
 #if desktop
 import Discord.DiscordClient;
@@ -24,7 +26,7 @@ class StoryMenuState extends MusicBeatState
 	var scoreText:FlxText;
 
 	var weekData:Array<Dynamic> = [
-		['SongOne'],
+		['Tutorial'],
 		['Moon-High','Far-Heaven','Space-Duel'],
 		['Moon-High-Remixed']
 	];
@@ -39,7 +41,7 @@ class StoryMenuState extends MusicBeatState
 	];
 
 	var weekNames:Array<String> = [
-		"Girlfriend",
+		"Cye but he teaches you",
 		"Cye",
 		"Cye but Remixed"
 	];
@@ -91,8 +93,16 @@ class StoryMenuState extends MusicBeatState
 		rankText.size = scoreText.size;
 		rankText.screenCenter(X);
 
+
+		var c1 = FlxColor.CYAN;
+		var c2 = FlxColor.fromRGB(126,251,255,255);
+
 		var ui_tex = Paths.getSparrowAtlas('campaign_menu_UI_assets');
-		var yellowBG:FlxSprite = new FlxSprite(0, 56).makeGraphic(FlxG.width, 400, 0xFFF9CF51);
+		//var yellowBG:FlxSprite = new FlxSprite(0, 56).makeGraphic(FlxG.width, 400, FlxColor.gradient(c1,c2,20,FlxEase.quadIn));
+
+		var yellowBG:FlxSprite = FlxGradient.createGradientFlxSprite(FlxG.width,400,FlxColor.gradient(c1,c2,20,FlxEase.quadIn));
+		yellowBG.x = 0;
+		yellowBG.y = 56;
 
 		grpWeekText = new FlxTypedGroup<MenuItem>();
 		add(grpWeekText);
@@ -260,6 +270,9 @@ class StoryMenuState extends MusicBeatState
 	{
 		if (weekUnlocked[curWeek])
 		{
+			Paths.setCurrentLevel("week" + curWeek);
+
+
 			if (stopspamming == false)
 			{
 				FlxG.sound.play(Paths.sound('confirmMenu'));
@@ -284,14 +297,18 @@ class StoryMenuState extends MusicBeatState
 			}
 
 			PlayState.storyDifficulty = curDifficulty;
-
-			PlayState.SONG = Song.loadFromJson(PlayState.storyPlaylist[0].toLowerCase() + diffic, PlayState.storyPlaylist[0].toLowerCase());
 			PlayState.storyWeek = curWeek;
 			PlayState.campaignScore = 0;
+
+
+			PlayState.SONG = Song.loadFromJson(PlayState.storyPlaylist[0].toLowerCase() + diffic, PlayState.storyPlaylist[0].toLowerCase());
+			
 			new FlxTimer().start(1, function(tmr:FlxTimer)
 			{
 				LoadingState.loadAndSwitchState(new PlayState(), true);
 			});
+
+			
 		}
 	}
 
