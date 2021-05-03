@@ -16,8 +16,9 @@ import flixel.util.FlxColor;
 class PauseSubState extends MusicBeatSubstate
 {
 	var grpMenuShit:FlxTypedGroup<Alphabet>;
+	var practiceWarning:FlxText;
 
-	var menuItems:Array<String> = ['Resume', 'Restart Song', 'Exit to menu'];
+	var menuItems:Array<String> = ['Resume', 'Restart Song', 'Toggle Practice Mode', 'Exit to menu'];
 	var curSelected:Int = 0;
 
 	var pauseMusic:FlxSound;
@@ -50,6 +51,8 @@ class PauseSubState extends MusicBeatSubstate
 		levelDifficulty.setFormat(Paths.font('vcr.ttf'), 32);
 		levelDifficulty.updateHitbox();
 		add(levelDifficulty);
+
+		
 
 		levelDifficulty.alpha = 0;
 		levelInfo.alpha = 0;
@@ -107,6 +110,18 @@ class PauseSubState extends MusicBeatSubstate
 					close();
 				case "Restart Song":
 					FlxG.resetState();
+				case "Toggle Practice Mode":
+					FlxG.save.data.practicemode = !FlxG.save.data.practicemode;
+					if(FlxG.save.data.practicemode){
+						practiceWarning = new FlxText(20, 15 + 64, 0, "", 32);
+						practiceWarning.text += "PRACTICE MODE ENABLED!";
+						practiceWarning.scrollFactor.set();
+						practiceWarning.setFormat(Paths.font('vcr.ttf'), 32,FlxColor.YELLOW);
+						practiceWarning.updateHitbox();
+						add(practiceWarning);
+					} else {
+						remove(practiceWarning);
+					}
 				case "Exit to menu":
 					PlayState.loadRep = false;
 					if (PlayState.offsetTesting)

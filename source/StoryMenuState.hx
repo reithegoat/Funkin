@@ -15,7 +15,7 @@ import lime.net.curl.CURLCode;
 import flixel.tweens.FlxEase;
 import flixel.util.FlxGradient;
 
-#if desktop
+#if !neko
 import Discord.DiscordClient;
 #end
 
@@ -27,12 +27,12 @@ class StoryMenuState extends MusicBeatState
 
 	var weekData:Array<Dynamic> = [
 		['Tutorial'],
-		['Moon-High','Far-Heaven','Space-Duel'],
-		['Moon-High-Remixed']
+		['Moon-High','Far-Heaven','Space-Duel','Galaxy'],
+		['Moon-High-X','Far-Heaven-X','Space-Duel-X','Galaxy-X']
 	];
 	var curDifficulty:Int = 1;
 
-	public static var weekUnlocked:Array<Bool> = [true,true];
+	public static var weekUnlocked:Array<Bool> = [true,false,false];
 
 	var weekCharacters:Array<Dynamic> = [
 		['cye','bf','gf'],
@@ -64,7 +64,7 @@ class StoryMenuState extends MusicBeatState
 
 	override function create()
 	{
-		#if desktop
+		#if !neko
 		// Updating Discord Rich Presence
 		DiscordClient.changePresence("In the Menus", null);
 		#end
@@ -117,7 +117,7 @@ class StoryMenuState extends MusicBeatState
 
 		trace("Line 70");
 
-		for (i in 0...weekData.length)
+		for (i in 0...weekUnlocked.length)
 		{
 			var weekThing:MenuItem = new MenuItem(0, yellowBG.y + yellowBG.height + 10, i);
 			weekThing.y += ((weekThing.height + 20) * i);
@@ -128,20 +128,39 @@ class StoryMenuState extends MusicBeatState
 			weekThing.antialiasing = true;
 			// weekThing.updateHitbox();
 
-			// Needs an offset thingie
-			if (!weekUnlocked[i])
-			{
-				var lock:FlxSprite = new FlxSprite(weekThing.width + 10 + weekThing.x);
-				lock.frames = ui_tex;
-				lock.animation.addByPrefix('lock', 'lock');
-				lock.animation.play('lock');
-				lock.ID = i;
-				lock.antialiasing = true;
-				grpLocks.add(lock);
+			trace("Checking week " + i +"...");
+			switch(i){
+				case 1:
+					if(!FlxG.save.data.finishedTutorial){
+						var lock:FlxSprite = new FlxSprite(weekThing.width + 10 + weekThing.x);
+						lock.frames = ui_tex;
+						lock.animation.addByPrefix('lock', 'lock');
+						lock.animation.play('lock');
+						lock.ID = i;
+						lock.antialiasing = true;
+						grpLocks.add(lock);
+						trace("Week 1 locked.");
+						weekUnlocked[i] = false;
+					} else {
+						weekUnlocked[1] = true;
+					}
+				case 2:
+					if(!FlxG.save.data.finishedWeek1){
+						var lock:FlxSprite = new FlxSprite(weekThing.width + 10 + weekThing.x);
+						lock.frames = ui_tex;
+						lock.animation.addByPrefix('lock', 'lock');
+						lock.animation.play('lock');
+						lock.ID = i;
+						lock.antialiasing = true;
+						grpLocks.add(lock);
+						trace("Week 2 locked.");
+						weekUnlocked[i] = false;
+					} else {
+						weekUnlocked[2] = true;
+					}
 			}
 		}
 
-		trace("Line 96");
 
 		grpWeekCharacters.add(new MenuCharacter(0, 100, 0.5, false));
 		grpWeekCharacters.add(new MenuCharacter(450, 25, 0.9, true));
@@ -150,7 +169,6 @@ class StoryMenuState extends MusicBeatState
 		difficultySelectors = new FlxGroup();
 		add(difficultySelectors);
 
-		trace("Line 124");
 
 		leftArrow = new FlxSprite(grpWeekText.members[0].x + grpWeekText.members[0].width + 10, grpWeekText.members[0].y + 10);
 		leftArrow.frames = ui_tex;
@@ -176,16 +194,19 @@ class StoryMenuState extends MusicBeatState
 		rightArrow.animation.play('idle');
 		difficultySelectors.add(rightArrow);
 
-		trace("Line 150");
 
 		add(yellowBG);
 		add(grpWeekCharacters);
 
-		txtTracklist = new FlxText(FlxG.width * 0.05, yellowBG.x + yellowBG.height + 100, 0, "Tracks", 32);
+		txtTracklist = new FlxText(FlxG.width * 0.05, yellowBG.x + yellowBG.height + 100, 500, "Tracks", 32);
 		txtTracklist.alignment = CENTER;
 		txtTracklist.font = rankText.font;
 		txtTracklist.color = 0xFFe55777;
+		
 		add(txtTracklist);
+
+
+
 		// add(rankText);
 		add(scoreText);
 		add(txtWeekTitle);
@@ -303,10 +324,17 @@ class StoryMenuState extends MusicBeatState
 
 			PlayState.SONG = Song.loadFromJson(PlayState.storyPlaylist[0].toLowerCase() + diffic, PlayState.storyPlaylist[0].toLowerCase());
 			
-			new FlxTimer().start(1, function(tmr:FlxTimer)
-			{
-				LoadingState.loadAndSwitchState(new PlayState(), true);
-			});
+			if(curWeek == 1){
+				new FlxTimer().start(1, function(tmr:FlxTimer)
+				{
+					LoadingState.loadAndSwitchState(new CyeIntroState(), true);
+				});
+			} else {
+				new FlxTimer().start(1, function(tmr:FlxTimer)
+				{
+					LoadingState.loadAndSwitchState(new PlayState(), true);
+				});
+			}
 
 			
 		}
@@ -393,6 +421,8 @@ class StoryMenuState extends MusicBeatState
 		{
 			txtTracklist.text += "\n" + i;
 		}
+
+		trace(txtTracklist.text.toUpperCase());
 
 		txtTracklist.text = txtTracklist.text.toUpperCase();
 

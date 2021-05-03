@@ -1,14 +1,17 @@
 package;
 
 import Sys.sleep;
+#if !neko
 import discord_rpc.DiscordRpc;
-
+#end
 using StringTools;
 
 class DiscordClient
 {
+	#if !neko
 	public function new()
 	{
+		
 		trace("Discord Client starting...");
 		DiscordRpc.start({
 			clientID: "557069829501091850", // change this to what ever the fuck you want lol
@@ -84,4 +87,5 @@ class DiscordClient
 
 		//trace('Discord RPC Updated. Arguments: $details, $state, $smallImageKey, $hasStartTimestamp, $endTimestamp');
 	}
+	#end
 }

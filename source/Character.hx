@@ -64,11 +64,11 @@ class Character extends FlxSprite
 			case 'cye':
 				tex = Paths.getSparrowAtlas('cye');
 				frames = tex;
-				animation.addByPrefix('idle', 'Cye Idle_', 12);
-				animation.addByPrefix('singUP', 'Cye Up_', 12);
-				animation.addByPrefix('singRIGHT', 'Cye Right_', 12);
-				animation.addByPrefix('singDOWN', 'Cye DOWN_', 12);
-				animation.addByPrefix('singLEFT', 'Cye Left_', 12);
+				animation.addByPrefix('idle', 'Cye Idle_', 24,false);
+				animation.addByPrefix('singUP', 'Cye Up_', 24,false);
+				animation.addByPrefix('singRIGHT', 'Cye Right_', 24,false);
+				animation.addByPrefix('singDOWN', 'Cye DOWN_', 24,false);
+				animation.addByPrefix('singLEFT', 'Cye Left_', 24,false);
 	
 				addOffset('idle');
 				addOffset("singUP", -6, 50);

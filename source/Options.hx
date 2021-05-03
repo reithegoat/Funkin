@@ -107,6 +107,24 @@ class InstantDeathMode extends Option {
 	}
 }
 
+class ViewCredits extends Option {
+	public function new (desc:String){
+		super();
+		description = desc;
+	}
+
+	public override function press():Bool{
+		trace("switch");
+		FlxG.switchState(new CreditsState());
+		display = updateDisplay();
+		return true;
+	}
+	private override function updateDisplay():String
+		{
+			return "View Credits";
+		}
+}
+
 class GhostNotesMode extends Option {
 	public function new (desc:String){
 		super();
@@ -122,6 +140,24 @@ class GhostNotesMode extends Option {
 
 	public override function updateDisplay():String {
 		return "Ghost Notes " + (!FlxG.save.data.ghostmode ? "off" : "on");
+	}
+}
+
+class PracticeMode extends Option {
+	public function new (desc:String){
+		super();
+		description = desc;
+	}
+
+	public override function press():Bool{
+		trace("switch");
+		FlxG.save.data.practicemode = !FlxG.save.data.practicemode;
+		display = updateDisplay();
+		return true;
+	}
+
+	public override function updateDisplay():String {
+		return "Practice Mode " + (!FlxG.save.data.practicemode ? "off" : "on");
 	}
 }
 

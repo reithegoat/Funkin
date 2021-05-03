@@ -24,8 +24,10 @@ import io.newgrounds.NG;
 import lime.app.Application;
 import openfl.Assets;
 
-#if desktop
+#if !neko
 import Discord.DiscordClient;
+#end
+#if desktop
 import sys.thread.Thread;
 #end
 
@@ -56,7 +58,7 @@ class TitleState extends MusicBeatState
 		
 		PlayerSettings.init();
 
-		#if desktop
+		#if !neko
 		DiscordClient.initialize();
 
 		Application.current.onExit.add (function (exitCode) {
@@ -309,6 +311,9 @@ class TitleState extends MusicBeatState
 			money.y += (i * 60) + 200;
 			credGroup.add(money);
 			textGroup.add(money);
+
+			money.alpha = 0;
+			FlxTween.tween(money,{alpha: 1},.15,{type: FlxTweenType.ONESHOT});
 		}
 	}
 
@@ -377,7 +382,7 @@ class TitleState extends MusicBeatState
 			// credTextShit.text = "Friday";
 			// credTextShit.screenCenter();
 			case 16:
-				addMoreText('Cye');
+				createCoolText(['Cye']);
 			// credTextShit.visible = true;
 			case 17:
 				addMoreText('Full');

@@ -14,7 +14,7 @@ import flixel.util.FlxColor;
 import io.newgrounds.NG;
 import lime.app.Application;
 
-#if desktop
+#if !neko
 import Discord.DiscordClient;
 #end
 
@@ -27,7 +27,7 @@ class MainMenuState extends MusicBeatState
 	var menuItems:FlxTypedGroup<FlxSprite>;
 
 	#if !switch
-	var optionShit:Array<String> = ['story mode', 'freeplay', 'donate', 'options'];
+	var optionShit:Array<String> = ['story mode', 'freeplay', 'credits', 'options'];
 	#else
 	var optionShit:Array<String> = ['story mode', 'freeplay'];
 	#end
@@ -46,7 +46,7 @@ class MainMenuState extends MusicBeatState
 
 	override function create()
 	{
-		#if desktop
+		#if !neko
 		// Updating Discord Rich Presence
 		DiscordClient.changePresence("In the Menus", null);
 		#end
@@ -151,56 +151,44 @@ class MainMenuState extends MusicBeatState
 
 			if (controls.ACCEPT)
 			{
-				if (optionShit[curSelected] == 'donate')
-				{
-					#if linux
-					Sys.command('/usr/bin/xdg-open', ["https://ninja-muffin24.itch.io/funkin", "&"]);
-					#else
-					FlxG.openURL('https://ninja-muffin24.itch.io/funkin');
-					#end
-				}
-				else
-				{
-					selectedSomethin = true;
-					FlxG.sound.play(Paths.sound('confirmMenu'));
+				selectedSomethin = true;
+				FlxG.sound.play(Paths.sound('confirmMenu'));
+				FlxFlicker.flicker(magenta, 1.1, 0.15, false);
 
-					FlxFlicker.flicker(magenta, 1.1, 0.15, false);
-
-					menuItems.forEach(function(spr:FlxSprite)
+				menuItems.forEach(function(spr:FlxSprite)
+				{
+					if (curSelected != spr.ID)
 					{
-						if (curSelected != spr.ID)
-						{
-							FlxTween.tween(spr, {alpha: 0}, 1.3, {
-								ease: FlxEase.quadOut,
-								onComplete: function(twn:FlxTween)
-								{
-									spr.kill();
-								}
-							});
-						}
-						else
-						{
-							FlxFlicker.flicker(spr, 1, 0.06, false, false, function(flick:FlxFlicker)
+						FlxTween.tween(spr, {alpha: 0}, 1.3, {
+							ease: FlxEase.quadOut,
+							onComplete: function(twn:FlxTween)
 							{
-								var daChoice:String = optionShit[curSelected];
+								spr.kill();
+							}
+						});
+					}
+					else
+					{
+						FlxFlicker.flicker(spr, 1, 0.06, false, false, function(flick:FlxFlicker)
+						{
+							var daChoice:String = optionShit[curSelected];
 
-								switch (daChoice)
-								{
-									case 'story mode':
-										FlxG.switchState(new StoryMenuState());
-										trace("Story Menu Selected");
-									case 'freeplay':
-										FlxG.switchState(new FreeplayState());
-
-										trace("Freeplay Menu Selected");
-
-									case 'options':
-										FlxG.switchState(new OptionsMenu());
-								}
-							});
-						}
-					});
-				}
+							switch (daChoice)
+							{
+								case 'story mode':
+									FlxG.switchState(new StoryMenuState());
+									trace("Story Menu Selected");
+								case 'freeplay':
+									FlxG.switchState(new FreeplayState());
+									trace("Freeplay Menu Selected");
+								case 'options':
+									FlxG.switchState(new OptionsMenu());
+								case 'credits':
+									FlxG.switchState(new CreditsState());
+							}
+						});
+					}
+				});
 			}
 		}
 

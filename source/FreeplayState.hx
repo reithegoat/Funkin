@@ -11,7 +11,7 @@ import flixel.util.FlxColor;
 import lime.utils.Assets;
 
 
-#if desktop
+#if !neko
 import Discord.DiscordClient;
 #end
 
@@ -37,12 +37,25 @@ class FreeplayState extends MusicBeatState
 
 	override function create()
 	{
+		/*
 		var initSonglist = CoolUtil.coolTextFile(Paths.txt('freeplaySonglist'));
 
 		for (i in 0...initSonglist.length)
 		{
 			var data:Array<String> = initSonglist[i].split(':');
 			songs.push(new SongMetadata(data[0], Std.parseInt(data[2]), data[1]));
+		}
+		*/
+
+		addSong("Tutorial",0,"cye");
+		addSong("SongOne",1,"bf-pixel");
+
+		if(FlxG.save.data.finishedTutorial){
+			addWeek(["Moon-High","Far-Heaven","Space-Duel","Galaxy"],1,["cye"]);
+		}
+
+		if(FlxG.save.data.finishedWeek1){
+			addWeek(['Moon-High-X','Far-Heaven-X','Space-Duel-X','Galaxy-X'],2,["cye"]);
 		}
 
 		/* 
@@ -53,7 +66,7 @@ class FreeplayState extends MusicBeatState
 			}
 		 */
 
-		 #if desktop
+		 #if !neko
 		 // Updating Discord Rich Presence
 		 DiscordClient.changePresence("In the Menus", null);
 		 #end
@@ -264,7 +277,7 @@ class FreeplayState extends MusicBeatState
 		#end
 
 		#if PRELOAD_ALL
-		FlxG.sound.playMusic(Paths.inst(songs[curSelected].songName), 0);
+		//FlxG.sound.playMusic(Paths.inst(songs[curSelected].songName), 0);
 		#end
 
 		var bullShit:Int = 0;
