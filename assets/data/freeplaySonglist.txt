@@ -1,6 +1,0 @@
-Tutorial:cye:0
-Moon-High:cye:1
-Far-Heaven:cye:1
-Space-Duel:cye:1
-Galaxy:cye:1
-Moon-High-Remixed:cye:2

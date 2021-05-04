@@ -24,7 +24,7 @@ import io.newgrounds.NG;
 import lime.app.Application;
 import openfl.Assets;
 
-#if !neko
+#if cpp
 import Discord.DiscordClient;
 #end
 #if desktop
@@ -58,7 +58,7 @@ class TitleState extends MusicBeatState
 		
 		PlayerSettings.init();
 
-		#if !neko
+		#if cpp
 		DiscordClient.initialize();
 
 		Application.current.onExit.add (function (exitCode) {
@@ -288,7 +288,30 @@ class TitleState extends MusicBeatState
 			new FlxTimer().start(2, function(tmr:FlxTimer)
 			{
 
-				FlxG.switchState(new MainMenuState());
+				// Get current version of Kade Engine
+
+				var http = new haxe.Http("https://raw.githubusercontent.com/reithegoat/Funkin/KadeCyeOnly/version.downloadMe");
+
+				http.onData = function (data:String) {
+				  
+				  	if (!MainMenuState.gameVer.contains(data.trim()) && !OutdatedSubState.leftState && MainMenuState.nightly == "")
+					{
+						trace('outdated lmao! ' + data.trim() + ' != ' + MainMenuState.gameVer);
+						OutdatedState.needVer = data;
+						FlxG.switchState(new OutdatedState());
+					}
+					else
+					{
+						FlxG.switchState(new MainMenuState());
+					}
+				}
+				
+				http.onError = function (error) {
+				  trace('error: $error');
+				  FlxG.switchState(new MainMenuState()); // fail but we go anyway
+				}
+				
+				http.request();
 
 			});
 			// FlxG.sound.play(Paths.music('titleShoot'), 0.7);

@@ -52,7 +52,14 @@ class PauseSubState extends MusicBeatSubstate
 		levelDifficulty.updateHitbox();
 		add(levelDifficulty);
 
-		
+		if(FlxG.save.data.practicemode){
+			practiceWarning = new FlxText(20, 15 + 64, 0, "", 32);
+			practiceWarning.text += "PRACTICE MODE ENABLED!";
+			practiceWarning.scrollFactor.set();
+			practiceWarning.setFormat(Paths.font('vcr.ttf'), 32,FlxColor.YELLOW);
+			practiceWarning.updateHitbox();
+			add(practiceWarning);
+		}
 
 		levelDifficulty.alpha = 0;
 		levelInfo.alpha = 0;

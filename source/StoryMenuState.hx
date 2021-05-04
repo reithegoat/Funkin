@@ -15,7 +15,7 @@ import lime.net.curl.CURLCode;
 import flixel.tweens.FlxEase;
 import flixel.util.FlxGradient;
 
-#if !neko
+#if cpp
 import Discord.DiscordClient;
 #end
 
@@ -64,7 +64,7 @@ class StoryMenuState extends MusicBeatState
 
 	override function create()
 	{
-		#if !neko
+		#if cpp
 		// Updating Discord Rich Presence
 		DiscordClient.changePresence("In the Menus", null);
 		#end

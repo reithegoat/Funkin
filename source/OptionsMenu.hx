@@ -25,6 +25,7 @@ class OptionsMenu extends MusicBeatState
 			new PracticeMode("Disables scores and dying. Completing a week on this mode will forfeit the week."),
 			new InstantDeathMode("Forces death when you miss one note."),
 			new GhostNotesMode("Notes turn invisible halfway up the screen."),
+			new RandomMode("Notes on the chart are randomly placed."),
 			new FPSCapOption("Cap your FPS (Left for -10, Right for -10)"),
 			new ScrollSpeedOption("Change your scroll speed (Left for -0.1, right for +0.1. If its at 1, it will be chart dependent)"),
 			new OffsetMenu("Get a note offset based off of your inputs!"),
