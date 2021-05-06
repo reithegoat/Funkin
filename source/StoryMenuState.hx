@@ -329,7 +329,8 @@ class StoryMenuState extends MusicBeatState
 			if(curWeek == 1){
 				new FlxTimer().start(1, function(tmr:FlxTimer)
 				{
-					LoadingState.loadAndSwitchState(new CyeIntroState(), true);
+					//LoadingState.loadAndSwitchState(new CyeIntroState(), true);
+					LoadingState.loadAndSwitchState(new CyeSlideshowState(), false);
 				});
 			} else {
 				new FlxTimer().start(1, function(tmr:FlxTimer)

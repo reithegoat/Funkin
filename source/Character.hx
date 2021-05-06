@@ -32,7 +32,7 @@ class Character extends FlxSprite
 		{
 			case 'gf':
 				// GIRLFRIEND CODE
-				tex = Paths.getSparrowAtlas('GF_assets');
+				tex = Paths.getSparrowAtlas('GF_assets','shared');
 				frames = tex;
 				animation.addByPrefix('cheer', 'GF Cheer', 24, false);
 				animation.addByPrefix('singLEFT', 'GF left note', 24, false);
@@ -62,7 +62,7 @@ class Character extends FlxSprite
 
 				playAnim('danceRight');
 			case 'cye':
-				tex = Paths.getSparrowAtlas('cye');
+				tex = Paths.getSparrowAtlas('cye','shared');
 				frames = tex;
 				animation.addByPrefix('idle', 'Cye Idle_', 24,false);
 				animation.addByPrefix('singUP', 'Cye Up_', 24,false);
@@ -76,6 +76,22 @@ class Character extends FlxSprite
 				addOffset("singLEFT", -10, 10);
 				addOffset("singDOWN", 0, -30);
 	
+				playAnim('idle');
+			case 'altcye':
+				tex = Paths.getSparrowAtlas('altcye','shared');
+				frames = tex;
+				animation.addByPrefix('idle', 'Cye Idle_', 24,false);
+				animation.addByPrefix('singUP', 'Cye Up_', 24,false);
+				animation.addByPrefix('singRIGHT', 'Cye Right_', 24,false);
+				animation.addByPrefix('singDOWN', 'Cye DOWN_', 24,false);
+				animation.addByPrefix('singLEFT', 'Cye Left_', 24,false);
+		
+				addOffset('idle');
+				addOffset("singUP", -6, 50);
+				addOffset("singRIGHT", 0, 27);
+				addOffset("singLEFT", -10, 10);
+				addOffset("singDOWN", 0, -30);
+		
 				playAnim('idle');
 			case 'pico':
 				tex = Paths.getSparrowAtlas('Pico_FNF_assetss');

@@ -2,6 +2,8 @@ import flixel.math.FlxMath;
 import flixel.FlxCamera;
 import flixel.math.FlxPoint;
 import flixel.FlxObject;
+import flixel.tweens.FlxTween;
+import flixel.tweens.FlxEase;
 #if windows
 import Discord.DiscordClient;
 #end
@@ -20,9 +22,7 @@ class GameplayCustomizeState extends MusicBeatState
     var defaultX:Float = FlxG.width * 0.55 - 135;
     var defaultY:Float = FlxG.height / 2 - 50;
 
-    var background:FlxSprite = new FlxSprite(-600, -200).loadGraphic(Paths.image('stageback','shared'));
-    var curt:FlxSprite = new FlxSprite(-500, -300).loadGraphic(Paths.image('stagecurtains','shared'));
-    var front:FlxSprite = new FlxSprite(-650, 600).loadGraphic(Paths.image('stagefront','shared'));
+    var bg:FlxSprite = new FlxSprite(-1100, -750).loadGraphic(Paths.image('tutorialbg','shared'));
 
     var sick:FlxSprite = new FlxSprite().loadGraphic(Paths.image('sick','shared'));
 
@@ -49,19 +49,20 @@ class GameplayCustomizeState extends MusicBeatState
 		camHUD.bgColor.alpha = 0;
         FlxG.cameras.add(camHUD);
 
-        background.scrollFactor.set(0.9,0.9);
-        curt.scrollFactor.set(0.9,0.9);
-        front.scrollFactor.set(0.9,0.9);
+        bg.scrollFactor.set(1,1);
 
-        add(background);
-        add(front);
-        add(curt);
+        add(bg);
 
 		var camFollow = new FlxObject(0, 0, 1, 1);
 
-		dad = new Character(100, 100, 'dad');
+        if(!FlxG.save.data.altcye)
+		    dad = new Character(100, 100+250, 'cye');
+        else
+		    dad = new Character(100, 100+250, 'altcye');
+		FlxTween.tween(dad,{y: dad.y - 200},4,{type: FlxTweenType.PINGPONG, ease: FlxEase.quadInOut});
 
-		var camPos:FlxPoint = new FlxPoint(dad.getGraphicMidpoint().x + 400, dad.getGraphicMidpoint().y);
+
+		var camPos:FlxPoint = new FlxPoint(dad.getGraphicMidpoint().x + 400, 700);
 
 		camFollow.setPosition(camPos.x, camPos.y);
 
@@ -74,7 +75,7 @@ class GameplayCustomizeState extends MusicBeatState
 
 		FlxG.camera.follow(camFollow, LOCKON, 0.01);
 		// FlxG.camera.setScrollBounds(0, FlxG.width, 0, FlxG.height);
-		FlxG.camera.zoom = 0.9;
+		FlxG.camera.zoom = 0.4;
 		FlxG.camera.focusOn(camFollow.getPosition());
 
 		strumLine = new FlxSprite(0, 25).makeGraphic(FlxG.width, 10);

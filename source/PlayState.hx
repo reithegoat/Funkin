@@ -381,8 +381,13 @@ class PlayState extends MusicBeatState
 			gf.scrollFactor.set(0.95, 0.95);
 		}
 
-		dad = new Character(65, 100, SONG.player2);
+		if(SONG.player2.contains("cye")){
+			if(FlxG.save.data.altcye){
+				SONG.player2 = "altcye";
+			}	
+		}
 
+		dad = new Character(65, 100, SONG.player2);
 		var camPos:FlxPoint = new FlxPoint(dad.getGraphicMidpoint().x, dad.getGraphicMidpoint().y);
 
 
@@ -397,7 +402,7 @@ class PlayState extends MusicBeatState
 					tweenCamIn();
 				}
 
-			case 'cye':
+			case 'cye' | 'altcye':
 				camPos.x += 600;
 				dad.y += 250;
 				FlxTween.tween(dad,{y: dad.y - 200},4,{type: FlxTweenType.PINGPONG, ease: FlxEase.quadInOut});
@@ -900,7 +905,7 @@ class PlayState extends MusicBeatState
 			{
 				
 				default:
-					babyArrow.frames = Paths.getSparrowAtlas('NOTE_assets');
+					babyArrow.frames = Paths.getSparrowAtlas('NOTE_assets','shared');
 					babyArrow.animation.addByPrefix('green', 'arrowUP');
 					babyArrow.animation.addByPrefix('blue', 'arrowDOWN');
 					babyArrow.animation.addByPrefix('purple', 'arrowLEFT');
@@ -1291,7 +1296,7 @@ class PlayState extends MusicBeatState
 
 				switch (dad.curCharacter)
 				{
-					case 'cye':
+					case 'cye' | 'altcye':
 						camFollow.y = 500;
 					case 'bf-pixel':
 						camFollow.y = boyfriend.getMidpoint().y - 100;
@@ -1434,9 +1439,12 @@ class PlayState extends MusicBeatState
 					// WIP interpolation shit? Need to fix the pause issue
 					// daNote.y = (strumLine.y - (songTime - daNote.strumTime) * (0.45 * PlayState.SONG.speed));
 	
-					
+					if(daNote.mustPress && (daNote.strumTime <= Conductor.songPosition) && FlxG.save.data.autoplay){
+						goodNoteHit(daNote);
+						boyfriend.holdTimer = 0;
+					}
 
-					if ((daNote.y < -daNote.height && !FlxG.save.data.downscroll || daNote.y >= strumLine.y + 106 && FlxG.save.data.downscroll) && daNote.mustPress)
+					if ((daNote.y < -daNote.height && !FlxG.save.data.downscroll || daNote.y >= strumLine.y + 106 && FlxG.save.data.downscroll) && daNote.mustPress && !FlxG.save.data.autoplay)
 					{
 						if (daNote.isSustainNote && daNote.wasGoodHit)
 						{
@@ -1446,10 +1454,13 @@ class PlayState extends MusicBeatState
 						}
 						else
 						{
+							
+
 							health -= 0.075;
 							vocals.volume = 0;
 							if (theFunne)
 								noteMiss(daNote.noteData, daNote);
+
 						}
 	
 						daNote.active = false;
@@ -1475,14 +1486,14 @@ class PlayState extends MusicBeatState
 
 	function endSong():Void
 	{
-		if (!loadRep)
+		if (!loadRep && !FlxG.save.data.autoplay)
 			rep.SaveReplay();
 
 		canPause = false;
 		FlxG.sound.music.volume = 0;
 		vocals.volume = 0;
 		secondaryVocals.volume = 0;
-		if (SONG.validScore)
+		if (SONG.validScore && !FlxG.save.data.autoplay)
 		{
 			#if !switch
 			Highscore.saveScore(SONG.song, Math.round(songScore), storyDifficulty);
@@ -1517,14 +1528,14 @@ class PlayState extends MusicBeatState
 
 					
 
-					if (SONG.validScore)
+					if (SONG.validScore && !FlxG.save.data.autoplay)
 					{
 						NGio.unlockMedal(60961);
 						Highscore.saveWeekScore(storyWeek, campaignScore, storyDifficulty);
 					}
 
 
-					if(!FlxG.save.data.practicemode){
+					if(!FlxG.save.data.practicemode && !FlxG.save.data.autoplay){
 						//FlxG.save.data.weekUnlocked = StoryMenuState.weekUnlocked;
 						switch(storyWeek){
 							case 0: //Tutorial
@@ -1663,7 +1674,7 @@ class PlayState extends MusicBeatState
 			var pixelShitPart1:String = "";
 			var pixelShitPart2:String = '';
 	
-			rating.loadGraphic(Paths.image(pixelShitPart1 + daRating + pixelShitPart2));
+			rating.loadGraphic(Paths.image(pixelShitPart1 + daRating + pixelShitPart2,'shared'));
 			rating.screenCenter();
 			rating.y -= 50;
 			rating.x = coolText.x - 125;
@@ -2446,7 +2457,8 @@ class PlayState extends MusicBeatState
 						{
 							if (Math.abs(note.noteData) == spr.ID)
 							{
-								spr.animation.play('confirm', true);
+								if(!FlxG.save.data.autoplay)
+									spr.animation.play('confirm', true);
 							}
 						});
 		

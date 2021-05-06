@@ -26,13 +26,14 @@ class OptionsMenu extends MusicBeatState
 			new InstantDeathMode("Forces death when you miss one note."),
 			new GhostNotesMode("Notes turn invisible halfway up the screen."),
 			new RandomMode("Notes on the chart are randomly placed."),
+			new AutoplayMode("Have the song play themselves. Completing a week or song will foreit the score acquired."),
 			new FPSCapOption("Cap your FPS (Left for -10, Right for -10)"),
 			new ScrollSpeedOption("Change your scroll speed (Left for -0.1, right for +0.1. If its at 1, it will be chart dependent)"),
-			new OffsetMenu("Get a note offset based off of your inputs!"),
 			new CustomizeGameplay("Drag'n'Drop Gameplay Modules around to your preference")
 			
 		]),
 		new OptionCatagory("Appearence", [
+			new AltCyeMode("Changes Cye to their Kodomodachi skin."),
 			new SongPositionOption("Show the songs current position (as a bar)"),
 			new DownscrollOption("Change the layout of the strumline."),
 			new RainbowFPSOption("Make the FPS Counter Rainbow (Only works with the FPS Counter toggeled on)"),
