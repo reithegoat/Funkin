@@ -15,7 +15,7 @@ import lime.net.curl.CURLCode;
 import flixel.tweens.FlxEase;
 import flixel.util.FlxGradient;
 
-#if cpp
+#if windows
 import Discord.DiscordClient;
 #end
 
@@ -64,7 +64,7 @@ class StoryMenuState extends MusicBeatState
 
 	override function create()
 	{
-		#if cpp
+		#if windows
 		// Updating Discord Rich Presence
 		DiscordClient.changePresence("In the Menus", null);
 		#end
@@ -94,11 +94,13 @@ class StoryMenuState extends MusicBeatState
 		rankText.screenCenter(X);
 
 
-		var c1 = FlxColor.CYAN;
-		var c2 = FlxColor.fromRGB(126,251,255,255);
+		
 
 		var ui_tex = Paths.getSparrowAtlas('campaign_menu_UI_assets');
 		//var yellowBG:FlxSprite = new FlxSprite(0, 56).makeGraphic(FlxG.width, 400, FlxColor.gradient(c1,c2,20,FlxEase.quadIn));
+
+		var c1 = FlxColor.CYAN;
+		var c2 = FlxColor.fromRGB(126,251,255,255);
 
 		var yellowBG:FlxSprite = FlxGradient.createGradientFlxSprite(FlxG.width,400,FlxColor.gradient(c1,c2,20,FlxEase.quadIn));
 		yellowBG.x = 0;

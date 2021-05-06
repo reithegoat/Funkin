@@ -193,6 +193,7 @@ class OptionsMenu extends MusicBeatState
 						ctrl.isMenuItem = true;
 						grpControls.add(ctrl);
 					}
+					currentDescription = currentSelectedCat.getOptions()[curSelected].getDescription();
 				}
 				else
 				{

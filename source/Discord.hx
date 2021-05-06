@@ -1,14 +1,14 @@
 package;
 
 import Sys.sleep;
-#if cpp
+#if windows
 import discord_rpc.DiscordRpc;
 #end
 using StringTools;
 
 class DiscordClient
 {
-	#if cpp
+	#if windows
 	public function new()
 	{
 		
